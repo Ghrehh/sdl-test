@@ -4,6 +4,7 @@ and may not be redistributed without written permission.*/
 //Using SDL and standard IO
 #include <SDL.h>
 #include <stdio.h>
+#include <iostream>
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 640;
@@ -29,6 +30,7 @@ SDL_Surface* gHelloWorld = NULL;
 
 bool init()
 {
+	std::cout << "foobar";
 	//Initialization flag
 	bool success = true;
 

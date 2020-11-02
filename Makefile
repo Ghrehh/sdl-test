@@ -12,14 +12,13 @@ compileRunMac: compileMac
 	./Game
 
 compileWindows:
-	g++ main.cpp -o Game.exe -lsfml-audio -lsfml-graphics -lsfml-window -lsfml-system -Ivendor/SFML-2.5.1-windows-gcc-7.3.0-mingw-64-bit/SFML-2.5.1/include -Lvendor/SFML-2.5.1-windows-gcc-7.3.0-mingw-64-bit/SFML-2.5.1/lib -std=c++17
+	g++ src/*.cpp -o Game.exe -Wl,-subsystem,windows -Ivendor/windows/SDL2-2.0.12/x86_64-w64-mingw32/include/SDL2 -Lvendor/windows/SDL2-2.0.12/x86_64-w64-mingw32/lib -lmingw32 -lSDL2main -lSDL2  -std=c++17 -v
 
 buildWindows: compileWindows
 	rm -rf -f build/windows/assets
 	cp -rf assets build/windows/
 	rm -f build/windows/Game.exe
 	cp Game.exe build/windows/
-	explorer build/windows
 
 compileRunWindows: compileWindows
 	PATH=build/windows ./Game.exe
