@@ -1,5 +1,5 @@
 compileMac:
-	clang++ src/*.cpp -o Game -Ivendor/mac/SDL2.framework/Headers -Fvendor/mac -framework SDL2 -std=c++17
+	clang++ src/*.cpp -o Game -Ivendor/mac/SDL2.framework/Headers -Wl,-rpath,@loader_path/../Frameworks -Ivendor/mac/SDL2_image.framework/Headers -Fvendor/mac -framework SDL2 -framework SDL2_image -std=c++17 
 
 buildMac: compileMac
 	rm -rf -f build/mac/Game.app/Contents/Resources/assets
@@ -9,7 +9,7 @@ buildMac: compileMac
 	open build/mac
 
 compileRunMac: compileMac
-	./Game
+	DYLD_FRAMEWORK_PATH=vendor/mac ./Game
 
 compileWindows:
 	g++ src/*.cpp -o Game.exe -Wl,-subsystem,windows -Ivendor/windows/SDL2-2.0.12/x86_64-w64-mingw32/include/SDL2 -Lvendor/windows/SDL2-2.0.12/x86_64-w64-mingw32/lib -lmingw32 -lSDL2main -lSDL2  -std=c++17 -v
@@ -22,3 +22,8 @@ buildWindows: compileWindows
 
 compileRunWindows: compileWindows
 	PATH=build/windows ./Game.exe
+
+
+c: compileMac
+b: buildMac
+cr: compileRunMac
