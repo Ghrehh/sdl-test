@@ -1,0 +1,5 @@
+*Game
+*Game.exe
+build/mac/Game.app/Contents/Resources/assets
+build/windows/assets
+.vs/
