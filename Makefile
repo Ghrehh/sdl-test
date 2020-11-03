@@ -12,7 +12,17 @@ compileRunMac: compileMac
 	DYLD_FRAMEWORK_PATH=vendor/mac ./Game
 
 compileWindows:
-	g++ src/*.cpp -o Game.exe -Wl,-subsystem,windows -Ivendor/windows/SDL2-2.0.12/x86_64-w64-mingw32/include/SDL2 -Lvendor/windows/SDL2-2.0.12/x86_64-w64-mingw32/lib -lmingw32 -lSDL2main -lSDL2  -std=c++17 -v
+	g++ src/*.cpp -o Game.exe -Wl,-subsystem,windows \
+		-Ivendor/windows/SDL2-2.0.12/x86_64-w64-mingw32/include/SDL2 \
+		-Ivendor/windows/SDL2_image-2.0.5/x86_64-w64-mingw32/include/SDL2 \
+		-Lvendor/windows/SDL2-2.0.12/x86_64-w64-mingw32/lib \
+		-Lvendor/windows/SDL2_image-2.0.5/x86_64-w64-mingw32/lib \
+		-lmingw32 \
+		-lSDL2main \
+		-lSDL2  \
+		-lSDL2_image  \
+		-std=c++17 \
+		-v
 
 buildWindows: compileWindows
 	rm -rf -f build/windows/assets
