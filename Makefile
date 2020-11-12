@@ -1,5 +1,14 @@
 compileMac:
-	clang++ src/*.cpp -o Game -Ivendor/mac/SDL2.framework/Headers -Wl,-rpath,@loader_path/../Frameworks -Ivendor/mac/SDL2_image.framework/Headers -Fvendor/mac -framework SDL2 -framework SDL2_image -std=c++17 
+	clang++ src/*.cpp -o Game \
+		 -Wl,-rpath,@loader_path/../Frameworks \
+ 		-Ivendor/mac/SDL2.framework/Headers \
+		-Ivendor/mac/SDL2_image.framework/Headers \
+		-Ivendor/mac/SDL2_ttf.framework/Headers \
+ 		-Fvendor/mac \
+ 		-framework SDL2 \
+	 	-framework SDL2_image \
+	 	-framework SDL2_ttf \
+	 	-std=c++17 
 
 buildMac: compileMac
 	rm -rf -f build/mac/Game.app/Contents/Resources/assets
