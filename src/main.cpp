@@ -1,69 +1,17 @@
 #include <SDL.h>
 #include <SDL_image.h>
-#include <stdio.h>
+#include "Texture.hpp"
+#include "Sprite.hpp"
 #include <string>
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
+int x = 0;
+int y = 0;
+
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
-
-
-class Texture {
-  public:
-    Texture(SDL_Renderer*, std::string);
-    ~Texture();
-    void render();
-  private:
-    SDL_Renderer* renderer;
-    SDL_Texture* texture;
-    int width;
-    int height;
-};
-
-Texture::Texture(SDL_Renderer* renderer, std::string path)
-{
-  this->renderer = renderer;
-
-  SDL_Surface* surface = IMG_Load(path.c_str());
-  if(surface == NULL)
-  {
-    printf(
-      "Unable to load image %s! SDL_image Error: %s\n",
-       path.c_str(),
-       IMG_GetError()
-    );
-    throw "";
-  }
-
-  texture = SDL_CreateTextureFromSurface(this->renderer, surface);
-  if(texture == NULL)
-  {
-    printf(
-      "Unable to create texture from %s! SDL Error: %s\n",
-      path.c_str(),
-      SDL_GetError()
-    );
-    throw "";
-  }
-
-  width = surface->w;
-  height = surface->h;
-
-  SDL_FreeSurface(surface);
-}
-
-Texture::~Texture()
-{
-  SDL_DestroyTexture(texture);
-}
-
-void Texture::render() {
-  SDL_Rect renderQuad = {10, 10, width, height};
-
-  SDL_RenderCopy(renderer, texture, NULL, &renderQuad);
-}
 
 void init()
 {
@@ -124,21 +72,47 @@ int main( int argc, char* args[] )
 
   bool quit = false;
   SDL_Event e;
-  Texture t = Texture(renderer, "assets/square.png");
+  Engine::Texture t = {renderer, "assets/square.png"};
+  Engine::Rect r = {0, 0, 25, 25};
+  Engine::Sprite s = {t, r};
+  Engine::Coordinate p = {100, 100};
   while(!quit)
   {
-    //Handle events on queue
-    while(SDL_PollEvent(&e) != 0)
-    {
-      //User requests quit
-      if( e.type == SDL_QUIT )
+    while( SDL_PollEvent( &e ) != 0 )
       {
-        quit = true;
+          if( e.type == SDL_QUIT )
+          {
+            // justbreak
+              quit = true;
+          }
+          /*
+          else if( e.type == SDL_KEYDOWN )
+          {
+              switch( e.key.keysym.sym )
+              {
+                  case SDLK_w:
+
+                  case SDLK_DOWN:
+                  gCurrentSurface = gKeyPressSurfaces[ KEY_PRESS_SURFACE_DOWN ];
+                  break;
+
+                  case SDLK_LEFT:
+                  gCurrentSurface = gKeyPressSurfaces[ KEY_PRESS_SURFACE_LEFT ];
+                  break;
+
+                  case SDLK_RIGHT:
+                  gCurrentSurface = gKeyPressSurfaces[ KEY_PRESS_SURFACE_RIGHT ];
+                  break;
+
+                  default:
+                  gCurrentSurface = gKeyPressSurfaces[ KEY_PRESS_SURFACE_DEFAULT ];
+                  break;
+              }
+          }*/
       }
-    }
 
     SDL_RenderClear(renderer);
-    t.render();
+    s.render(p);
     SDL_RenderPresent(renderer);
   }
 
