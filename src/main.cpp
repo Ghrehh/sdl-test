@@ -1,8 +1,14 @@
+#include <string>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <nlohmann_json.hpp>
 #include "Texture.hpp"
 #include "Sprite.hpp"
-#include <string>
+
+#include <iostream>
+#include <fstream>
+
+using json = nlohmann::json;
 
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -65,10 +71,33 @@ void init()
   }
 }
 
+json open_json_file(std::string path) {
+  std::string all_lines;
+  std::string line;
+  std::ifstream file(path);
+
+  if (file.is_open()) {
+    while(file) {
+      std::getline(file, line);
+      all_lines += line;
+    }
+
+    file.close();
+  }
+
+  return json::parse(all_lines);
+}
+
 
 int main( int argc, char* args[] )
 {
   init();
+
+  auto j = open_json_file("assets/test1.json");
+
+  for (auto sprite : j) {
+    std::cout << sprite["height"] << "\n" << std::endl;
+  }
 
   bool quit = false;
   SDL_Event e;
