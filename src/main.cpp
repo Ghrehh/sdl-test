@@ -93,7 +93,7 @@ int main( int argc, char* args[] )
 {
   init();
 
-  auto j = open_json_file("assets/test1.json");
+  auto j = open_json_file("assets/sprites/test1/sprites.json");
 
   for (auto sprite : j) {
     std::cout << sprite["height"] << "\n" << std::endl;
