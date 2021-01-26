@@ -7,16 +7,25 @@
 #include <fstream>
 
 namespace Engine {
-  struct Rect {
+  struct Coordinate {
     int x;
     int y;
+  };
+
+  struct Size {
     int width;
     int height;
   };
 
-  struct Coordinate {
-    int x;
-    int y;
+  class Rect {
+    public:
+      Rect(int x, int y, int width, int height) {
+        position = Coordinate{x, y};
+        size = Size{width, height};
+      }
+
+      Coordinate position;
+      Size size;
   };
 
   class Texture {
@@ -132,16 +141,16 @@ namespace Engine {
       ) const {
         // Is this leaking memory?
         SDL_Rect src_rect;
-        src_rect.x = sprite.x;
-        src_rect.y = sprite.y;
-        src_rect.w = sprite.width;
-        src_rect.h = sprite.height;
+        src_rect.x = sprite.position.x;
+        src_rect.y = sprite.position.y;
+        src_rect.w = sprite.size.width;
+        src_rect.h = sprite.size.height;
 
         SDL_Rect destination_rect;
         destination_rect.x = position.x;
         destination_rect.y = position.y;
-        destination_rect.w = sprite.width;
-        destination_rect.h = sprite.height;
+        destination_rect.w = sprite.size.width;
+        destination_rect.h = sprite.size.height;
 
         SDL_RenderCopy(renderer, texture.texture, &src_rect, &destination_rect);
       }
@@ -149,6 +158,18 @@ namespace Engine {
       void render() {
         SDL_RenderPresent(renderer);
       }
+
+      std::tuple<bool, SDL_Event> get_event() const {
+        SDL_Event e;
+        auto result = SDL_PollEvent(&e);
+
+        bool more_events = true;
+        if (result == 0) {
+          more_events = false;
+        }
+
+        return {more_events, e};
+      } 
 
     private:
   };
